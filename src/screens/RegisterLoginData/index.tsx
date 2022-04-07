@@ -34,6 +34,7 @@ export function RegisterLoginData() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: {
       errors
     }
@@ -46,10 +47,19 @@ export function RegisterLoginData() {
       id: String(uuid.v4()),
       ...formData
     }
-
     const dataKey = '@savepass:logins';
-
-    // Save data on AsyncStorage and navigate to 'Home' screen
+    try {
+      const dataPromisseRegister = await AsyncStorage.getItem(dataKey);
+      const dataRegister = dataPromisseRegister ? JSON.parse(dataPromisseRegister) as FormData[] : [];
+    
+      const data = [...dataRegister, newLoginData];
+      await AsyncStorage.setItem(dataKey, JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Não foi possível salvar o registro!')
+    }
+    reset();
+    navigate('Home');
   }
 
   return (
@@ -65,10 +75,7 @@ export function RegisterLoginData() {
             testID="service-name-input"
             title="Nome do serviço"
             name="service_name"
-            error={
-              // Replace here with real content
-              'Has error ? show error message'
-            }
+            error={errors.name && errors.name.message}
             control={control}
             autoCapitalize="sentences"
             autoCorrect
@@ -77,10 +84,7 @@ export function RegisterLoginData() {
             testID="email-input"
             title="E-mail"
             name="email"
-            error={
-              // Replace here with real content
-              'Has error ? show error message'
-            }
+            error={errors.name && errors.name.message}
             control={control}
             autoCorrect={false}
             autoCapitalize="none"
@@ -90,10 +94,7 @@ export function RegisterLoginData() {
             testID="password-input"
             title="Senha"
             name="password"
-            error={
-              // Replace here with real content
-              'Has error ? show error message'
-            }
+            error={errors.name && errors.name.message}
             control={control}
             secureTextEntry
           />
