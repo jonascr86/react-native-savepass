@@ -46,6 +46,7 @@ export function Home() {
         if(data.service_name.includes(searchText))
           return data
       })
+      setSearchListData(data)
     }
   }
 
@@ -56,7 +57,7 @@ export function Home() {
   }
 
   useFocusEffect(useCallback(() => {
-    // loadData();
+    loadData();
   }, []));
 
   return (
@@ -74,7 +75,7 @@ export function Home() {
           value={searchText}
           returnKeyType="search"
           onSubmitEditing={handleFilterLoginData}
-
+ 
           onSearchButtonPress={handleFilterLoginData}
         />
 
